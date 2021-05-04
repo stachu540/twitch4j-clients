@@ -1,0 +1,44 @@
+name: Continous Integration
+on:
+  push:
+    branches-ignore: [ main ]
+    paths:
+      - "**.java"
+      - "**.kts"
+      - "**.kt"
+  pull_request:
+    branches: [ develop ]
+    paths:
+      - "**.java"
+      - "**.kts"
+      - "**.kt"
+
+env:
+  RELEASE: false
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        jvm: [ 11, 15, 16 ]
+    steps:
+      - uses: actions/checkout@v2.3.4
+        name: Checkout
+      - uses: actions/cache@v2.1.0
+        name: Cache JDK${{ matrix.jvm }}
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: JDK${{ matrix.jvm }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: JDK${{ matrix.jvm }}-gradle-
+      - uses: actions/setup-java@v1.4.3
+        name: Setup JDK${{ matrix.jvm }}
+        with:
+          java-version: ${{ matrix.jvm }}
+      - name: Test with JDK${{ matrix.jvm }}
+        uses: eskatos/gradle-command-action@v1.3.3
+        with:
+          arguments: check
