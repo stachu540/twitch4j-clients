@@ -11,19 +11,18 @@ import okhttp3.OkHttpClient;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class OkHttpEngine implements HttpEngine {
-    private final OkHttpClient client;
+  private final OkHttpClient client;
 
-    @Override
-    public final ICall create(Request request, IMapper mapper) {
-        return new OkHttpCall(request, mapper, client);
-    }
+  public static HttpEngine create() {
+    return create(new OkHttpClient());
+  }
 
+  public static HttpEngine create(OkHttpClient client) {
+    return new OkHttpEngine(client);
+  }
 
-    public static HttpEngine create() {
-        return create(new OkHttpClient());
-    }
-
-    public static HttpEngine create(OkHttpClient client) {
-        return new OkHttpEngine(client);
-    }
+  @Override
+  public final ICall create(Request request, IMapper mapper) {
+    return new OkHttpCall(request, mapper, client);
+  }
 }

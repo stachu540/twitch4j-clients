@@ -12,11 +12,6 @@ insert_final_newline = true
 [*.md]
 trim_trailing_whitespace = false
 
-# Java
-[*.java]
-indent_style = space
-indent_size = 4
-
-[*.{js,kts,yaml,yml,xml,hbs}]
+[*.{js, kts, yaml, yml, xml, java}]
 indent_style = space
 indent_size = 2

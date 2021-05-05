@@ -8,12 +8,12 @@ import org.jetbrains.annotations.NotNull;
 
 @Value
 public class Request implements IMessage {
-    @NotNull
-    HttpMethod method;
-    @NotNull
-    URI url;
-    @NotNull
-    IBody body;
-    @NotNull
-    MultiValuedMap<String, String> headers;
+  @NotNull
+  HttpMethod method;
+  @NotNull
+  URI url;
+  @NotNull
+  IBody body;
+  @NotNull
+  MultiValuedMap<String, String> headers;
 }

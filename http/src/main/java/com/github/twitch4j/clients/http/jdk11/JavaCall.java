@@ -19,37 +19,37 @@ import org.apache.commons.collections4.MultiValuedMap;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public final class JavaCall implements ICall {
-    @Getter
-    private final Request request;
-    private final IMapper mapper;
-    private final HttpClient client;
+  @Getter
+  private final Request request;
+  private final IMapper mapper;
+  private final HttpClient client;
 
-    @Override
-    public final Response execute() throws Exception {
-        return toResponse(client.send(toRequest(), HttpResponse.BodyHandlers.ofByteArray()));
+  @Override
+  public final Response execute() throws Exception {
+    return toResponse(client.send(toRequest(), HttpResponse.BodyHandlers.ofByteArray()));
+  }
+
+  @Override
+  public final void enqueue(Consumer<Response> response, Consumer<Throwable> error) {
+    try {
+      response.accept(execute());
+    } catch (Exception e) {
+      error.accept(e);
     }
+  }
 
-    @Override
-    public final void enqueue(Consumer<Response> response, Consumer<Throwable> error) {
-        try {
-            response.accept(execute());
-        } catch (Exception e) {
-            error.accept(e);
-        }
-    }
+  private Response toResponse(HttpResponse<byte[]> realResponse) throws IOException {
+    MultiValuedMap<String, String> headers = MultiMapUtils.newListValuedHashMap();
+    realResponse.headers().map().forEach(headers::putAll);
+    return new Response(request, Objects.requireNonNull(Status.ofCode(realResponse.statusCode())), mapper.mapTo(realResponse.body()), MultiMapUtils.unmodifiableMultiValuedMap(headers));
+  }
 
-    private Response toResponse(HttpResponse<byte[]> realResponse) throws IOException {
-        MultiValuedMap<String, String> headers = MultiMapUtils.newListValuedHashMap();
-        realResponse.headers().map().forEach(headers::putAll);
-        return new Response(request, Objects.requireNonNull(Status.ofCode(realResponse.statusCode())), mapper.mapTo(realResponse.body()), MultiMapUtils.unmodifiableMultiValuedMap(headers));
-    }
+  private HttpRequest toRequest() {
+    HttpRequest.Builder builder = HttpRequest.newBuilder(request.getUrl())
+      .method(request.getMethod().toString(), HttpRequest.BodyPublishers.ofInputStream(() -> request.getBody().getAsStream()));
 
-    private HttpRequest toRequest() {
-        HttpRequest.Builder builder = HttpRequest.newBuilder(request.getUrl())
-            .method(request.getMethod().toString(), HttpRequest.BodyPublishers.ofInputStream(() -> request.getBody().getAsStream()));
+    request.getHeaders().entries().forEach(e -> builder.header(e.getKey(), e.getValue()));
 
-        request.getHeaders().entries().forEach(e -> builder.header(e.getKey(), e.getValue()));
-
-        return builder.build();
-    }
+    return builder.build();
+  }
 }

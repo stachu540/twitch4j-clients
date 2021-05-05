@@ -1,20 +1,21 @@
 package com.github.twitch4j.clients.http;
 
-import java.io.IOException;
 import java.util.function.Consumer;
 
 public interface ICall {
-    Request getRequest();
+  Request getRequest();
 
-    Response execute() throws Exception;
+  Response execute() throws Exception;
 
-    void enqueue(Consumer<Response> response, Consumer<Throwable> error);
+  void enqueue(Consumer<Response> response, Consumer<Throwable> error);
 
-    default void enqueue(Consumer<Response> response) {
-        enqueue(response, ignore -> {});
-    }
+  default void enqueue(Consumer<Response> response) {
+    enqueue(response, ignore -> {
+    });
+  }
 
-    default void enqueue() {
-        enqueue(ignore -> {});
-    }
+  default void enqueue() {
+    enqueue(ignore -> {
+    });
+  }
 }

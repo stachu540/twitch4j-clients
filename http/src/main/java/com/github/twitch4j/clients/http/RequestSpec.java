@@ -19,59 +19,59 @@ import org.apache.commons.text.StringSubstitutor;
 
 @RequiredArgsConstructor
 public final class RequestSpec {
-    private final IMapper mapper;
-    private final HttpMethod method;
-    private final String baseUrl;
-    private final String endpoint;
-    private IBody body = new BodyImpl(new ByteArrayInputStream(new byte[0]), mapper, Charset.defaultCharset(), 0);
-    private final SetValuedMap<String, String> queryParameters = MultiMapUtils.newSetValuedHashMap();
-    private final SetValuedMap<String, String> headers = MultiMapUtils.newSetValuedHashMap();
-    private final Map<String, String> pathParameters = new LinkedHashMap<>();
+  private final IMapper mapper;
+  private final HttpMethod method;
+  private final String baseUrl;
+  private final String endpoint;
+  private final SetValuedMap<String, String> queryParameters = MultiMapUtils.newSetValuedHashMap();
+  private final SetValuedMap<String, String> headers = MultiMapUtils.newSetValuedHashMap();
+  private final Map<String, String> pathParameters = new LinkedHashMap<>();
+  private IBody body = new BodyImpl(new ByteArrayInputStream(new byte[0]), mapper, Charset.defaultCharset(), 0);
 
-    public final void setPathParameter(String key, String value) {
-        pathParameters.put(key, value);
-    }
+  public final void setPathParameter(String key, String value) {
+    pathParameters.put(key, value);
+  }
 
-    public final void setQueryParameter(String key, String value) {
-        queryParameters.put(key, value);
-    }
+  public final void setQueryParameter(String key, String value) {
+    queryParameters.put(key, value);
+  }
 
-    public final void setHeader(String key, String value) {
-        headers.put(key, value);
-    }
+  public final void setHeader(String key, String value) {
+    headers.put(key, value);
+  }
 
-    public final void addQueryParameter(String key, String value) {
-        Set<String> values = new LinkedHashSet<>(queryParameters.get(key));
-        values.add(value);
+  public final void addQueryParameter(String key, String value) {
+    Set<String> values = new LinkedHashSet<>(queryParameters.get(key));
+    values.add(value);
 
-        queryParameters.putAll(key, values);
-    }
+    queryParameters.putAll(key, values);
+  }
 
-    public final void addHeader(String key, String value) {
-        Set<String> values = new LinkedHashSet<>(headers.get(key));
-        values.add(value);
+  public final void addHeader(String key, String value) {
+    Set<String> values = new LinkedHashSet<>(headers.get(key));
+    values.add(value);
 
-        headers.putAll(key, values);
-    }
+    headers.putAll(key, values);
+  }
 
-    public final void setBody(Object body) throws IOException {
-        this.body = mapper.mapTo(body);
-    }
+  public final void setBody(Object body) throws IOException {
+    this.body = mapper.mapTo(body);
+  }
 
-    Request create() {
-        return new Request(method, getUrl(), body, headers);
-    }
+  Request create() {
+    return new Request(method, getUrl(), body, headers);
+  }
 
-    URI getUrl() {
-        StringBuilder sb = new StringBuilder();
+  URI getUrl() {
+    StringBuilder sb = new StringBuilder();
 
-        sb.append(getBaseUrl());
-        sb.append(queryParameters.entries().stream().map(e -> String.format("%s=%s", e.getKey(), e.getValue())).collect(Collectors.joining("&", "?", "")));
+    sb.append(getBaseUrl());
+    sb.append(queryParameters.entries().stream().map(e -> String.format("%s=%s", e.getKey(), e.getValue())).collect(Collectors.joining("&", "?", "")));
 
-        return URI.create(sb.toString());
-    }
+    return URI.create(sb.toString());
+  }
 
-    String getBaseUrl() {
-        return baseUrl + StringSubstitutor.replace(endpoint, pathParameters, "{", "}");
-    }
+  String getBaseUrl() {
+    return baseUrl + StringSubstitutor.replace(endpoint, pathParameters, "{", "}");
+  }
 }

@@ -12,18 +12,18 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class JavaHttpEngine implements HttpEngine {
-    private final HttpClient client;
+  private final HttpClient client;
 
-    @Override
-    public final ICall create(Request request, IMapper mapper) {
-        return new JavaCall(request, mapper, client);
-    }
+  public static HttpEngine create() {
+    return create(HttpClient.newHttpClient());
+  }
 
-    public static HttpEngine create() {
-        return create(HttpClient.newHttpClient());
-    }
+  public static HttpEngine create(HttpClient client) {
+    return new JavaHttpEngine(client);
+  }
 
-    public static HttpEngine create(HttpClient client) {
-        return new JavaHttpEngine(client);
-    }
+  @Override
+  public final ICall create(Request request, IMapper mapper) {
+    return new JavaCall(request, mapper, client);
+  }
 }

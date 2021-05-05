@@ -35,15 +35,18 @@ Check out the [Documentation](https://twitch4j.github.io/docs/getting-started/in
 
 ## Problems
 
-If you have problems using the *Twitch Java API*, then you are welcome to join the [discord server](https://discord.gg/FQ5vgW3) to talk about it.
+If you have problems using the *Twitch Java API*, then you are welcome to join
+the [discord server](https://discord.gg/FQ5vgW3) to talk about it.
 
-If you discover any issues/have feature requests, then please [open an issue here](https://github.com/twitch4j/twitch4j/issues/new).
+If you discover any issues/have feature requests, then
+please [open an issue here](https://github.com/twitch4j/twitch4j/issues/new).
 
 ## Contributing
 
-We welcome contributions to the library, be it new features, bug fixes, or even small enhancements.
-Please do read the [contributing guide](https://twitch4j.github.io/docs/contribution/) on the documentation site as it provides code guidelines and helpful tips for getting started.
-By contributing, you are expected to abide by our [code of conduct](https://github.com/twitch4j/.github/blob/main/CODE_OF_CONDUCT.md) and agree to the license below.
+We welcome contributions to the library, be it new features, bug fixes, or even small enhancements. Please do read
+the [contributing guide](https://twitch4j.github.io/docs/contribution/) on the documentation site as it provides code
+guidelines and helpful tips for getting started. By contributing, you are expected to abide by
+our [code of conduct](https://github.com/twitch4j/.github/blob/main/CODE_OF_CONDUCT.md) and agree to the license below.
 Thank you again for your interest in improving Twitch4J!
 
 ## License

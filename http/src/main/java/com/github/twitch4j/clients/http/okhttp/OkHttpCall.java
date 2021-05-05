@@ -21,65 +21,65 @@ import org.jetbrains.annotations.NotNull;
 
 
 public final class OkHttpCall implements ICall {
-    @Getter
-    private final Request request;
-    private final IMapper mapper;
-    private final OkHttpClient client;
+  @Getter
+  private final Request request;
+  private final IMapper mapper;
+  private final OkHttpClient client;
 
-    OkHttpCall(Request request, IMapper mapper, OkHttpClient client) {
-        this.request = request;
-        this.mapper = mapper;
-        this.client = client;
-    }
+  OkHttpCall(Request request, IMapper mapper, OkHttpClient client) {
+    this.request = request;
+    this.mapper = mapper;
+    this.client = client;
+  }
 
-    @Override
-    public final Response execute() throws Exception {
-        return doResponse(client.newCall(doRequest()).execute());
-    }
+  @Override
+  public final Response execute() throws Exception {
+    return doResponse(client.newCall(doRequest()).execute());
+  }
 
-    @Override
-    public final void enqueue(Consumer<Response> result, Consumer<Throwable> error) {
-        try {
-            client.newCall(doRequest()).enqueue(new Callback() {
-                @Override
-                public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                    error.accept(e);
-                }
-
-                @Override
-                public void onResponse(@NotNull Call call, @NotNull okhttp3.Response response) throws IOException {
-                    result.accept(doResponse(response));
-                }
-            });
-        } catch (IOException e) {
-            error.accept(e);
-        }
-    }
-
-    private okhttp3.Request doRequest() throws IOException {
-        RequestBody body = (HttpMethod.requiresRequestBody(request.getMethod().name()) && request.getBody().getSize() == 0) ? RequestBody.create(new byte[0]) : null;
-
-        if (request.getBody().getSize() > 0 && HttpMethod.permitsRequestBody(request.getMethod().name())) {
-            body = RequestBody.create(request.getBody().getAsBytes());
+  @Override
+  public final void enqueue(Consumer<Response> result, Consumer<Throwable> error) {
+    try {
+      client.newCall(doRequest()).enqueue(new Callback() {
+        @Override
+        public void onFailure(@NotNull Call call, @NotNull IOException e) {
+          error.accept(e);
         }
 
-        okhttp3.Request.Builder builder = new okhttp3.Request.Builder().url(HttpUrl.get(request.getUrl()))
-            .method(request.getMethod().name(), body);
-
-        request.getHeaders().entries().forEach(e -> builder.addHeader(e.getKey(), e.getValue()));
-
-        return builder.build();
-    }
-
-    private Response doResponse(okhttp3.Response realResponse) throws IOException {
-        MultiValuedMap<String, String> headers = MultiMapUtils.newListValuedHashMap();
-        Object body = realResponse.body();
-        if (body != null) {
-            body = ((ResponseBody) body).byteStream();
+        @Override
+        public void onResponse(@NotNull Call call, @NotNull okhttp3.Response response) throws IOException {
+          result.accept(doResponse(response));
         }
-        realResponse.headers().toMultimap().forEach(headers::putAll);
-
-        return new Response(request, Status.ofCode(realResponse.code()), mapper.mapTo(body), MultiMapUtils.unmodifiableMultiValuedMap(headers));
+      });
+    } catch (IOException e) {
+      error.accept(e);
     }
+  }
+
+  private okhttp3.Request doRequest() throws IOException {
+    RequestBody body = (HttpMethod.requiresRequestBody(request.getMethod().name()) && request.getBody().getSize() == 0) ? RequestBody.create(new byte[0]) : null;
+
+    if (request.getBody().getSize() > 0 && HttpMethod.permitsRequestBody(request.getMethod().name())) {
+      body = RequestBody.create(request.getBody().getAsBytes());
+    }
+
+    okhttp3.Request.Builder builder = new okhttp3.Request.Builder().url(HttpUrl.get(request.getUrl()))
+      .method(request.getMethod().name(), body);
+
+    request.getHeaders().entries().forEach(e -> builder.addHeader(e.getKey(), e.getValue()));
+
+    return builder.build();
+  }
+
+  private Response doResponse(okhttp3.Response realResponse) throws IOException {
+    MultiValuedMap<String, String> headers = MultiMapUtils.newListValuedHashMap();
+    Object body = realResponse.body();
+    if (body != null) {
+      body = ((ResponseBody) body).byteStream();
+    }
+    realResponse.headers().toMultimap().forEach(headers::putAll);
+
+    return new Response(request, Status.ofCode(realResponse.code()), mapper.mapTo(body), MultiMapUtils.unmodifiableMultiValuedMap(headers));
+  }
 
 }

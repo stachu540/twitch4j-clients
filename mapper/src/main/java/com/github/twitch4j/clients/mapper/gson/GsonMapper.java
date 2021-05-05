@@ -15,38 +15,38 @@ import org.apache.commons.io.IOUtils;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class GsonMapper implements IMapper {
-    private final Gson mapper;
+  private final Gson mapper;
 
-    @Override
-    public final <T> T mapFrom(IBody body, Class<T> type) throws IOException {
-        try {
-            return mapper.fromJson(body.getAsReader(), type);
-        } catch (JsonParseException e) {
-            throw new IOException(e);
-        }
-    }
+  public static IMapper create() {
+    return create(new Gson());
+  }
 
-    @Override
-    public final IBody mapTo(Object body) {
-        return mapTo(body, Charset.defaultCharset());
-    }
+  public static IMapper create(Gson gson) {
+    return new GsonMapper(gson);
+  }
 
-    @Override
-    public final IBody mapTo(Object body, Charset charset) {
-        String raw = mapper.toJson(body);
-        InputStream data = IOUtils.toInputStream(raw, charset);
-        return new BodyImpl(data, this, charset, raw.length());
-    }
+  public static IMapper create(GsonBuilder builder) {
+    return create(builder.create());
+  }
 
-    public static IMapper create() {
-        return create(new Gson());
+  @Override
+  public final <T> T mapFrom(IBody body, Class<T> type) throws IOException {
+    try {
+      return mapper.fromJson(body.getAsReader(), type);
+    } catch (JsonParseException e) {
+      throw new IOException(e);
     }
+  }
 
-    public static IMapper create(Gson gson) {
-        return new GsonMapper(gson);
-    }
+  @Override
+  public final IBody mapTo(Object body) {
+    return mapTo(body, Charset.defaultCharset());
+  }
 
-    public static IMapper create(GsonBuilder builder) {
-        return create(builder.create());
-    }
+  @Override
+  public final IBody mapTo(Object body, Charset charset) {
+    String raw = mapper.toJson(body);
+    InputStream data = IOUtils.toInputStream(raw, charset);
+    return new BodyImpl(data, this, charset, raw.length());
+  }
 }

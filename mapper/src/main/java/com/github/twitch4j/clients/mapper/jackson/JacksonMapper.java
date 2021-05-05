@@ -14,34 +14,34 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class JacksonMapper implements IMapper {
-    private final ObjectMapper mapper;
+  private final ObjectMapper mapper;
 
-    @Override
-    public final <T> T mapFrom(IBody body, Class<T> type) throws IOException {
-        return mapper.readValue(body.getAsReader(), type);
-    }
+  public static IMapper create() {
+    return create(new ObjectMapper());
+  }
 
-    @Override
-    public final IBody mapTo(Object body) throws IOException {
-        return mapTo(body, Charset.defaultCharset());
-    }
+  public static IMapper create(ObjectMapper gson) {
+    return new JacksonMapper(gson);
+  }
 
-    @Override
-    public final IBody mapTo(Object body, Charset charset) throws IOException {
-        byte[] raw = mapper.writeValueAsBytes(body);
-        InputStream data = new ByteArrayInputStream(raw);
-        return new BodyImpl(data, this, charset, raw.length);
-    }
+  public static IMapper create(JsonMapper.Builder builder) {
+    return create(builder.build());
+  }
 
-    public static IMapper create() {
-        return create(new ObjectMapper());
-    }
+  @Override
+  public final <T> T mapFrom(IBody body, Class<T> type) throws IOException {
+    return mapper.readValue(body.getAsReader(), type);
+  }
 
-    public static IMapper create(ObjectMapper gson) {
-        return new JacksonMapper(gson);
-    }
+  @Override
+  public final IBody mapTo(Object body) throws IOException {
+    return mapTo(body, Charset.defaultCharset());
+  }
 
-    public static IMapper create(JsonMapper.Builder builder) {
-        return create(builder.build());
-    }
+  @Override
+  public final IBody mapTo(Object body, Charset charset) throws IOException {
+    byte[] raw = mapper.writeValueAsBytes(body);
+    InputStream data = new ByteArrayInputStream(raw);
+    return new BodyImpl(data, this, charset, raw.length);
+  }
 }

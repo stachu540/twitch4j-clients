@@ -127,7 +127,7 @@ module.exports = {
     [
       "@semantic-release/github",
       {
-        assets: [ { path: "**/build/libs/**-shaded.jar" } ],
+        assets: [{path: "**/build/libs/**-shaded.jar"}],
         labels: false,
         failTitle: false,
         failComment: false,

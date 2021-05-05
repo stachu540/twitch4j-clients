@@ -15,45 +15,45 @@ import org.jetbrains.annotations.Nullable;
 
 @RequiredArgsConstructor
 public class BodyImpl implements IBody {
-    private final InputStream data;
-    private final IMapper mapper;
-    @Getter
-    @Nullable
-    private final Charset charset;
-    @Getter
-    private final int size;
+  private final InputStream data;
+  private final IMapper mapper;
+  @Getter
+  @Nullable
+  private final Charset charset;
+  @Getter
+  private final int size;
 
-    @Override
-    public InputStream getAsStream() {
-        return IOUtils.buffer(data);
-    }
+  @Override
+  public InputStream getAsStream() {
+    return IOUtils.buffer(data);
+  }
 
-    @Override
-    public ByteBuffer getAsBuffer() {
-        try {
-            return ByteBuffer.wrap(getAsBytes());
-        } catch (IOException e) {
-            return ByteBuffer.allocate(size);
-        }
+  @Override
+  public ByteBuffer getAsBuffer() {
+    try {
+      return ByteBuffer.wrap(getAsBytes());
+    } catch (IOException e) {
+      return ByteBuffer.allocate(size);
     }
+  }
 
-    @Override
-    public Reader getAsReader() {
-        return new InputStreamReader(data);
-    }
+  @Override
+  public Reader getAsReader() {
+    return new InputStreamReader(data);
+  }
 
-    @Override
-    public String getAsString() throws IOException {
-        return IOUtils.toString(data, (charset == null) ? Charset.defaultCharset() : charset);
-    }
+  @Override
+  public String getAsString() throws IOException {
+    return IOUtils.toString(data, (charset == null) ? Charset.defaultCharset() : charset);
+  }
 
-    @Override
-    public byte[] getAsBytes() throws IOException {
-        return IOUtils.readFully(data, size);
-    }
+  @Override
+  public byte[] getAsBytes() throws IOException {
+    return IOUtils.readFully(data, size);
+  }
 
-    @Override
-    public <T> T getAs(Class<T> type) throws IOException {
-        return mapper.mapFrom(this, type);
-    }
+  @Override
+  public <T> T getAs(Class<T> type) throws IOException {
+    return mapper.mapFrom(this, type);
+  }
 }

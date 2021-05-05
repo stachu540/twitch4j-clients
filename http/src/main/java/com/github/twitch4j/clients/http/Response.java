@@ -7,12 +7,12 @@ import org.jetbrains.annotations.NotNull;
 
 @Value
 public class Response implements IMessage {
-    @NotNull
-    Request request;
-    @NotNull
-    Status status;
-    @NotNull
-    IBody body;
-    @NotNull
-    MultiValuedMap<String, String> headers;
+  @NotNull
+  Request request;
+  @NotNull
+  Status status;
+  @NotNull
+  IBody body;
+  @NotNull
+  MultiValuedMap<String, String> headers;
 }

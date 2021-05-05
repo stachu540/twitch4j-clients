@@ -8,20 +8,20 @@ import java.nio.charset.Charset;
 import org.jetbrains.annotations.Nullable;
 
 public interface IBody {
-    @Nullable
-    Charset getCharset();
+  @Nullable
+  Charset getCharset();
 
-    int getSize();
+  int getSize();
 
-    InputStream getAsStream();
+  InputStream getAsStream();
 
-    ByteBuffer getAsBuffer();
+  ByteBuffer getAsBuffer();
 
-    Reader getAsReader();
+  Reader getAsReader();
 
-    String getAsString() throws IOException;
+  String getAsString() throws IOException;
 
-    byte[] getAsBytes() throws IOException;
+  byte[] getAsBytes() throws IOException;
 
-    <T> T getAs(Class<T> type) throws IOException;
+  <T> T getAs(Class<T> type) throws IOException;
 }
