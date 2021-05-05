@@ -1,13 +1,11 @@
 name: Continous Integration
 on:
   push:
-    branches-ignore: [ main ]
     paths:
       - "**.java"
       - "**.kts"
       - "**.kt"
   pull_request:
-    branches: [ develop ]
     paths:
       - "**.java"
       - "**.kts"
