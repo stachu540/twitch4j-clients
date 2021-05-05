@@ -32,10 +32,11 @@ jobs:
             ~/.gradle/wrapper
           key: JDK${{ matrix.jvm }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: JDK${{ matrix.jvm }}-gradle-
-      - uses: actions/setup-java@v2
+      - uses: actions/setup-java@v2.0.0
         name: Setup JDK${{ matrix.jvm }}
         with:
           java-version: ${{ matrix.jvm }}
+          distribution: adopt
       - name: Test with JDK${{ matrix.jvm }}
         uses: eskatos/gradle-command-action@v1.3.3
         with:
