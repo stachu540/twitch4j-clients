@@ -9,8 +9,7 @@ updates:
     pull-request-branch-name:
       separator: "/"
     reviewers:
-      - "PhilippHeuer"
-      - "iProdigy"
+      - "stachu540"
     commit-message:
       prefix: "deps:"
   - package-ecosystem: "gradle"
@@ -22,7 +21,6 @@ updates:
     pull-request-branch-name:
       separator: "/"
     reviewers:
-      - "PhilippHeuer"
-      - "iProdigy"
+      - "stachu540"
     commit-message:
       prefix: "deps:"
