@@ -1,13 +1,42 @@
 package com.github.twitch4j.clients.websocket;
 
-import com.github.twitch4j.clients.websocket.event.EventManager;
+import com.github.twitch4j.clients.event.EventManager;
+import java.net.URI;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import org.jetbrains.annotations.Nullable;
 
-public abstract class WebSocketClient {
-  public abstract EventManager getEventManager();
+@SuperBuilder
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+public final class WebSocketClient {
 
-  public abstract void start();
+  private final WebSocketEngine engine;
 
-  public abstract void stop();
+  @Getter
+  private final EventManager eventManager;
+  private final EventParser eventParser;
+  @Getter
+  private final URI url;
 
-  protected abstract void sendRaw(String message);
+  public void start() {
+    engine.start(url, eventManager, eventParser);
+  }
+
+  public void stop(int code, @Nullable String reason) {
+    engine.stop(code, reason);
+  }
+
+  public void stop(int code) {
+    stop(1000, null);
+  }
+
+  public void stop() {
+    stop(1000);
+  }
+
+  protected void sendRaw(String message) {
+    engine.sendRaw(message);
+  }
 }
