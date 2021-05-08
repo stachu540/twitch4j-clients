@@ -37,6 +37,7 @@ jobs:
         with:
           java-version: ${{ matrix.jvm }}
           distribution: adopt
+      - run: echo $GITHUB_WORKSPACE
       - name: Test with JDK${{ matrix.jvm }}
         uses: eskatos/gradle-command-action@v1.3.3
         with:
