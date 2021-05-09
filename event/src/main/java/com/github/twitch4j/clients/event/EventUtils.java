@@ -1,96 +1,79 @@
 package com.github.twitch4j.clients.event;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
-import java.util.AbstractMap;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @SuppressWarnings("unchecked")
 public final class EventUtils {
-
-  private static final Type<Consumer<? extends Event>> DEFAULT_CONSUMER = new Type<Consumer<? extends Event>>();
-
-  static Map<Class<? extends Event>, Consumer<? extends Event>> fetchEvents(Object eventHandler) {
-    if (DEFAULT_CONSUMER.raw.isAssignableFrom(eventHandler.getClass())) {
-      Class<Consumer<? extends Event>> consumerType = (Class<Consumer<? extends Event>>) eventHandler.getClass();
-      Class<? extends Event> type = new Type<>((Class<? extends Event>) ((ParameterizedType) consumerType.getGenericSuperclass()).getActualTypeArguments()[0]).getRaw();
-      return Collections.singletonMap(type, (Consumer<? extends Event>) eventHandler);
-    } else {
-      Map<Class<? extends Event>, Consumer<? extends Event>> events = new LinkedHashMap<>();
-      for (Method m : eventHandler.getClass().getMethods()) {
-        if (m.isAnnotationPresent(EventHandler.class)) {
-          Map.Entry<Class<? extends Event>, Consumer<Event>> entry = composeEvent(eventHandler, m);
-          Consumer<? extends Event> handler = entry.getValue();
-          if (events.containsKey(entry.getKey())) {
-            handler = events.get(entry.getKey()).andThen((Consumer<Event>) handler);
-          }
-          events.put(entry.getKey(), handler);
-        }
-      }
-      return events;
+  static Map<Class<? extends Event>, Consumer<Event>> fetchEvents(Object eventHandler) {
+    Map<Class<? extends Event>, Consumer<Event>> events = new LinkedHashMap<>();
+    if (eventHandler instanceof Consumer) {
+      Arrays.stream(eventHandler.getClass().getGenericInterfaces())
+        .map(t -> (ParameterizedType) t).filter(t -> ((Class<?>) t.getRawType()).isAssignableFrom(Consumer.class))
+        .map(t -> (Class<?>) t.getActualTypeArguments()[0])
+        .filter(Event.class::isAssignableFrom).map(c -> (Class<? extends Event>) c)
+        .forEach(c -> putEvent(events, c, (Consumer<Event>) eventHandler));
     }
-  }
-
-  private static Map.Entry<Class<? extends Event>, Consumer<Event>> composeEvent(Object eventHandler, Method method) {
-    EventHandler handler = method.getAnnotation(EventHandler.class);
-    Class<? extends Event> eventType = handler.value();
-    if (eventType == EventHandler.Void.class && method.getParameterCount() == 1) {
-      Class<?> rawParameterType = method.getParameterTypes()[0];
-      if (rawParameterType.isAssignableFrom(Event.class)) {
-        eventType = (Class<? extends Event>) rawParameterType;
-      }
-    } else {
-      throw new IllegalArgumentException(String.format("The method \"%s\" doesn't contains implements Event.class", method.getName()));
-    }
-    final Class<? extends Event> thatEvent = eventType;
-
-    return new AbstractMap.SimpleImmutableEntry<>(thatEvent, event -> {
-      if (thatEvent.isInstance(event)) {
-        try {
-          if (method.getParameterTypes()[0].isInstance(event)) {
-            method.invoke(eventHandler, event);
-          } else {
-            Object[] parameters = Arrays.stream(method.getParameters())
-              .map(parameter -> {
-                try {
-                  String name = getter(parameter.getName());
-                  Class<?> type = parameter.getType();
-                  Method parameterMethod = event.getClass().getMethod(name);
-                  if (parameterMethod.getReturnType().isAssignableFrom(type)) {
-                    return parameterMethod.invoke(event);
-                  } else {
-                    return null;
+    Arrays.stream(eventHandler.getClass().getMethods()).filter(m -> m.isAnnotationPresent(EventHandler.class) && m.getParameterCount() > 0)
+      .forEach(m -> {
+        int paramCount = m.getParameterCount();
+        if (paramCount == 1 && Event.class.isAssignableFrom(m.getParameterTypes()[0])) {
+          putEvent(events, (Class<? extends Event>) m.getParameterTypes()[0], event -> {
+            try {
+              m.invoke(eventHandler, event);
+            } catch (ReflectiveOperationException e) {
+              throw new IllegalCallerException("Cannot invoke this event", e);
+            }
+          });
+        } else {
+          Class<? extends Event> type = m.getAnnotation(EventHandler.class).value();
+          if (!EventHandler.Void.class.isAssignableFrom(type)) {
+            putEvent(events, type, event -> {
+              Object[] parameters = Arrays.stream(m.getParameters()).map(parameter -> {
+                if (type.isAssignableFrom(parameter.getType())) {
+                  return event;
+                } else if (parameter.isAnnotationPresent(EventParameter.class)) {
+                  try {
+                    String name = getter(parameter.getAnnotation(EventParameter.class).value());
+                    return event.getClass().getMethod(name).invoke(event);
+                  } catch (ReflectiveOperationException e) {
+                    throw new IllegalStateException("Cannot get access to this method.", e);
                   }
-                } catch (ReflectiveOperationException ignore) {
-                  return null;
+                } else {
+                  throw new IllegalArgumentException("Cannot translate this parameter. It must be a Event or his parameter (without get prefix - ex. requesting \"simpleName\" will calls \"getSimpleName()\")");
                 }
               }).toArray();
-            method.invoke(eventHandler, parameters);
+              try {
+                m.invoke(eventHandler, parameters);
+              } catch (ReflectiveOperationException e) {
+                throw new IllegalCallerException("Cannot invoke this event", e);
+              }
+            });
           }
-        } catch (ReflectiveOperationException ignore) {
-
         }
-      }
-    });
+      });
+    return events;
+  }
+
+  private static void putEvent(Map<Class<? extends Event>, Consumer<Event>> events, Class<? extends Event> eventType, Consumer<Event> handler) {
+    if (events.containsKey(eventType)) {
+      handler = events.get(eventType).andThen(handler);
+    }
+    events.put(eventType, handler);
   }
 
   private static String getter(String name) {
     return "get" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
   }
 
-  @Getter
-  @RequiredArgsConstructor
-  static class Type<T> {
-    private final Class<T> raw;
-
-    Type() {
-      this.raw = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+  private static <T> Class<T> getActualTypeArguments(Class<?> type, int index) {
+    java.lang.reflect.Type generic = type.getGenericSuperclass();
+    if (generic instanceof ParameterizedType) {
+      return (Class<T>) ((ParameterizedType) generic).getActualTypeArguments()[index];
     }
+    return null;
   }
 }
