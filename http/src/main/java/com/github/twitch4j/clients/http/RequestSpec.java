@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.MultiMapUtils;
 import org.apache.commons.collections4.SetValuedMap;
 import org.apache.commons.text.StringSubstitutor;
+import org.jetbrains.annotations.Nullable;
 
 @RequiredArgsConstructor
 public final class RequestSpec {
@@ -26,7 +27,8 @@ public final class RequestSpec {
   private final SetValuedMap<String, String> queryParameters = MultiMapUtils.newSetValuedHashMap();
   private final SetValuedMap<String, String> headers = MultiMapUtils.newSetValuedHashMap();
   private final Map<String, String> pathParameters = new LinkedHashMap<>();
-  private IBody body = new BodyImpl(new ByteArrayInputStream(new byte[0]), mapper, Charset.defaultCharset(), 0);
+  @Nullable
+  private IBody body = null;
 
   public final void setPathParameter(String key, String value) {
     pathParameters.put(key, value);
@@ -59,6 +61,9 @@ public final class RequestSpec {
   }
 
   Request create() {
+    if (body == null) {
+      body = new BodyImpl(new ByteArrayInputStream(new byte[0]), mapper, Charset.defaultCharset(), 0);
+    }
     return new Request(method, getUrl(), body, headers);
   }
 

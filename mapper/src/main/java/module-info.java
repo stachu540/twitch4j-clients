@@ -13,4 +13,5 @@ module com.github.twitch4j.clients.mapper {
   exports com.github.twitch4j.clients.mapper;
   exports com.github.twitch4j.clients.mapper.gson;
   exports com.github.twitch4j.clients.mapper.jackson;
+  exports com.github.twitch4j.clients.mapper.impl;
 }
