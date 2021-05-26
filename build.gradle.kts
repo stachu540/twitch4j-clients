@@ -61,7 +61,7 @@ subprojects {
       implementation(group = "com.neovisionaries", name = "nv-websocket-client", version = "2.14")
       implementation(group = "org.apache.httpcomponents.client5", name = "httpclient5", version = "5.0.3")
 
-      implementation(group = "com.google.code.gson", name = "gson", version = "2.8.6")
+      implementation(group = "com.google.code.gson", name = "gson", version = "2.8.7")
     }
     implementation(group = "org.jetbrains", name = "annotations", version = "20.1.0")
     // Test
