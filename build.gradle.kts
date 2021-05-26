@@ -59,7 +59,7 @@ subprojects {
       // Clients
       implementation(group = "com.squareup.okhttp3", name = "okhttp", version = "4.9.1")
       implementation(group = "com.neovisionaries", name = "nv-websocket-client", version = "2.14")
-      implementation(group = "org.apache.httpcomponents.client5", name = "httpclient5", version = "5.0.3")
+      implementation(group = "org.apache.httpcomponents.client5", name = "httpclient5", version = "5.1")
 
       implementation(group = "com.google.code.gson", name = "gson", version = "2.8.6")
     }
