@@ -1,7 +1,7 @@
 rootProject.name = "twitch4j-clients"
 
 include(
-  ":http",
+  ":http-core",
   ":http-engine-okhttp",
   ":http-engine-jdk11",
   ":http-engine-apache",

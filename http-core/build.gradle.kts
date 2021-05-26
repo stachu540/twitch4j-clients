@@ -7,7 +7,4 @@ dependencies {
   implementation(group = "io.reactivex.rxjava3", name = "rxjava")
   implementation(group = "io.projectreactor", name = "reactor-core")
   implementation(group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core")
-
-  implementation(group = "com.squareup.okhttp3", name = "okhttp")
-  implementation(group = "org.apache.httpcomponents.client5", name = "httpclient5")
 }

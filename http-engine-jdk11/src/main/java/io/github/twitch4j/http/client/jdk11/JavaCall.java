@@ -1,4 +1,4 @@
-package com.github.twitch4j.clients.http.jdk11;
+package io.github.twitch4j.http.client.jdk11;
 
 import com.github.twitch4j.clients.http.ICall;
 import com.github.twitch4j.clients.http.Request;

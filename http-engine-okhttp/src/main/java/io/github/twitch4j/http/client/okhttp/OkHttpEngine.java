@@ -1,4 +1,4 @@
-package com.github.twitch4j.clients.http.okhttp;
+package io.github.twitch4j.http.client.okhttp;
 
 import com.github.twitch4j.clients.http.HttpEngine;
 import com.github.twitch4j.clients.http.ICall;
