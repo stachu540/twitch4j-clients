@@ -6,7 +6,6 @@ plugins {
   id("io.freefair.lombok") version "5.3.3.3"
   id("org.jetbrains.dokka") version "1.4.32"
   id("com.coditory.manifest") version "0.1.14"
-  id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 allprojects {
   repositories {
@@ -28,7 +27,6 @@ subprojects {
   apply(plugin = "maven-publish")
   apply(plugin = "io.freefair.lombok")
   apply(plugin = "com.coditory.manifest")
-  apply(plugin = "com.github.johnrengelman.shadow")
 
   base {
     archivesBaseName = artifactId
@@ -112,19 +110,8 @@ subprojects {
       }
     }
 
-    // shadowjar & relocation
-    val relocateShadowJar by creating(com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation::class) {
-      target = shadowJar.get()
-      prefix = "com.github.twitch4j.clients.shadow.${"v$version".replace(".", "_")}"
-    }
-
     // jar artifact id and version
     withType<Jar> {
-      if (this is com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
-        dependsOn(relocateShadowJar)
-        archiveClassifier.set("shaded")
-        assemble.configure { dependsOn(this@withType) }
-      }
       dependsOn(project.tasks.manifest)
       manifest.from(File(buildDir, "resources/main/META-INF/MANIFEST.MF"))
     }

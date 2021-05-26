@@ -7,7 +7,7 @@ fun MavenPom.default() {
 		system.set("GitHub")
 		url.set("https://github.com/twitch4j/twitch4j/issues")
 	}
-	inceptionYear.set("2017")
+	inceptionYear.set("2021")
 	developers { all }
 	licenses {
 		license {
