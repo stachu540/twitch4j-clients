@@ -65,7 +65,7 @@ subprojects {
     }
     implementation(group = "org.jetbrains", name = "annotations", version = "20.1.0")
     // Test
-    testImplementation(platform("org.junit:junit-bom:5.7.1"))
+    testImplementation(platform("org.junit:junit-bom:5.7.2"))
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter")
     testImplementation(group = "org.mockito", name = "mockito-core", version = "3.11.0")
     testImplementation(group = "org.mockito", name = "mockito-junit-jupiter", version = "3.9.0")
