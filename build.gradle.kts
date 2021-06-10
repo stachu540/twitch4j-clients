@@ -47,7 +47,7 @@ subprojects {
   dependencies {
     constraints {
       // Reactive Streams / Coroutines
-      implementation(group = "io.reactivex.rxjava3", name = "rxjava", version = "3.0.12")
+      implementation(group = "io.reactivex.rxjava3", name = "rxjava", version = "3.0.13")
       implementation(group = "io.projectreactor", name = "reactor-core", version = "3.4.5")
       implementation(group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.4.3")
 
@@ -67,7 +67,7 @@ subprojects {
     // Test
     testImplementation(platform("org.junit:junit-bom:5.7.1"))
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter")
-    testImplementation(group = "org.mockito", name = "mockito-core", version = "3.9.0")
+    testImplementation(group = "org.mockito", name = "mockito-core", version = "3.11.0")
     testImplementation(group = "org.mockito", name = "mockito-junit-jupiter", version = "3.9.0")
     testImplementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")
   }
