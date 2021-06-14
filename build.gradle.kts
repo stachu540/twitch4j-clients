@@ -52,7 +52,7 @@ subprojects {
       implementation(group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.4.3")
 
       // Apache Commons
-      implementation(group = "commons-io", name = "commons-io", version = "2.8.0")
+      implementation(group = "commons-io", name = "commons-io", version = "2.10.0")
       implementation(group = "org.apache.commons", name = "commons-text", version = "1.9")
       implementation(group = "org.apache.commons", name = "commons-collections4", version = "4.4")
 
