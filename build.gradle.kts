@@ -68,7 +68,7 @@ subprojects {
     testImplementation(platform("org.junit:junit-bom:5.7.1"))
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter")
     testImplementation(group = "org.mockito", name = "mockito-core", version = "3.11.0")
-    testImplementation(group = "org.mockito", name = "mockito-junit-jupiter", version = "3.9.0")
+    testImplementation(group = "org.mockito", name = "mockito-junit-jupiter", version = "3.11.1")
     testImplementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")
   }
 
