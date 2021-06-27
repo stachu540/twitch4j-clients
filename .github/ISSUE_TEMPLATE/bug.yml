@@ -55,13 +55,6 @@ body:
   - type: input
     attributes:
       label: IDE
-      description: Your integrated development enviornment name with the version, or URL if it is web-based cloud IDE.
-      placeholder: ex. IntelliJ IDEA 2021.2, Codeanywhere (https://codeanywhere.com/)
-    validations:
-      required: true
-  - type: input
-    attributes:
-      label: IDE
       description: Your integrated development enviornment name with or without the version, or URL if it is web-based cloud IDE.
       placeholder: ex. IntelliJ IDEA 2021.2, Codeanywhere (https://codeanywhere.com/), VSCode
     validations:
