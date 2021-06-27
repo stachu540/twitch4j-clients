@@ -1,0 +1,97 @@
+name: 🐛 Bug Report
+description: Something isn't working as expected? 🤔
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Bug Report
+  - type: checkboxes
+    attributes:
+      label: Prerequisites
+      options:
+        - label: If this is a question/suggestion, I have already considered discuss it on [Discord Server](https://discord.gg/FQ5vgW3)
+          required: true
+        - label: This issue specifically has something to do with Twitch4J
+          required: true
+        - label: I have attempted to [look for similar issues](https://github.com/twitch4j/twitch4j/issues) already
+          required: true
+  - type: textarea
+    attributes:
+      label: Current Behavior
+      description: A concise description of what you're experiencing.
+    validations:
+      required: true
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Code Snippet / Exception / Log
+      description: A snippet of your code along with a exception / logs if available.
+      placeholder: |
+        Exception in thread "main" java.lang.RuntimeException: A example exception
+          at com.github.twitch4j.examples.TwitchExampleTrace.methodB(TwitchExampleTrace.java:13)
+          at com.github.twitch4j.examples.TwitchExampleTrace.methodA(TwitchExampleTrace.java:9)
+          at com.github.twitch4j.examples.TwitchExampleTrace.main(TwitchExampleTrace.java:5)
+      format:
+  - type: textarea
+    attributes:
+      label: Expected Behavior
+      description: A clear and concise description of what you expected to happen (or code).
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Build Configuration
+      description: Paste your build configuration if you are using it
+      format:
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        #### Environment
+  - type: input
+    attributes:
+      label: IDE
+      description: Your integrated development enviornment name with the version, or URL if it is web-based cloud IDE.
+      placeholder: ex. IntelliJ IDEA 2021.2, Codeanywhere (https://codeanywhere.com/)
+    validation:
+      required: true
+  - type: input
+    attributes:
+      label: IDE
+      description: Your integrated development enviornment name with or without the version, or URL if it is web-based cloud IDE.
+      placeholder: ex. IntelliJ IDEA 2021.2, Codeanywhere (https://codeanywhere.com/), VSCode
+    validation:
+      required: true
+  - type: input
+    attributes:
+      label: Java Version
+      description: Your current java version. `java -version`
+      placeholder: e.g. 16.0.1, 1.8.0_281, 11.0.10
+    validation:
+      required: true
+  - type: input
+    attributes:
+      label: Build tools
+      description: Your build tools with the version if you are using it
+      placeholder: e.g. Gradle 6.7, Maven 3.3.9
+      value:
+  - type: input
+    attributes:
+      label: Operating system
+      description: Your operating system where you are build it
+      placeholder: e.g. OSX 10.13.4, Windows 10
+      value:
+    validation:
+      required: true
+  - type: textarea
+    attributes:
+      label: Possible Solution
+      description: A suggestion for a fix, if you have a idea
+  - type: textarea
+    attributes:
+      label: Additional Context/Screenshots
+      description: Add any other context about the problem here.
