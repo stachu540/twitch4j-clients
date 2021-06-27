@@ -34,7 +34,7 @@ body:
           at com.github.twitch4j.examples.TwitchExampleTrace.methodB(TwitchExampleTrace.java:13)
           at com.github.twitch4j.examples.TwitchExampleTrace.methodA(TwitchExampleTrace.java:9)
           at com.github.twitch4j.examples.TwitchExampleTrace.main(TwitchExampleTrace.java:5)
-      format:
+      render:
   - type: textarea
     attributes:
       label: Expected Behavior
@@ -45,7 +45,7 @@ body:
     attributes:
       label: Build Configuration
       description: Paste your build configuration if you are using it
-      format:
+      render:
     validations:
       required: true
   - type: markdown
@@ -57,21 +57,21 @@ body:
       label: IDE
       description: Your integrated development enviornment name with the version, or URL if it is web-based cloud IDE.
       placeholder: ex. IntelliJ IDEA 2021.2, Codeanywhere (https://codeanywhere.com/)
-    validation:
+    validations:
       required: true
   - type: input
     attributes:
       label: IDE
       description: Your integrated development enviornment name with or without the version, or URL if it is web-based cloud IDE.
       placeholder: ex. IntelliJ IDEA 2021.2, Codeanywhere (https://codeanywhere.com/), VSCode
-    validation:
+    validations:
       required: true
   - type: input
     attributes:
       label: Java Version
       description: Your current java version. `java -version`
       placeholder: e.g. 16.0.1, 1.8.0_281, 11.0.10
-    validation:
+    validations:
       required: true
   - type: input
     attributes:
@@ -85,7 +85,7 @@ body:
       description: Your operating system where you are build it
       placeholder: e.g. OSX 10.13.4, Windows 10
       value:
-    validation:
+    validations:
       required: true
   - type: textarea
     attributes:
