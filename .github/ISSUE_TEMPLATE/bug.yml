@@ -50,7 +50,7 @@ body:
         - `groovy` for `build.gradle`
         - `kotlin` for `build.gradle.kts`
       placeholder: |
-        e.x.
+        e.g.
         ```groovy
         repositories {
           mavenCentral()
