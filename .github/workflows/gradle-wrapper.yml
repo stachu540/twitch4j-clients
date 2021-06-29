@@ -15,6 +15,6 @@ jobs:
       - name: Gradle Wrapper Check
         uses: gradle-update/update-gradle-wrapper-action@v1
         with:
-          reviewers: PhilippHeuer, iProdigy
+          reviewers: stachu540
           labels: dependencies
           target-branch: develop
