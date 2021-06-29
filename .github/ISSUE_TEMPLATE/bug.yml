@@ -12,7 +12,7 @@ body:
       label: Prerequisites
       description: |
         The following prerequisites must be fulfilled. 
-        If you are spot a bug please provide some details in [Environment](#environment) field and [console output with the stacktrace](#log_output_stacktrace) (if it is avaliable).
+        If you are spot a bug please provide some details in [Environment](#issue_form_environment) field and [console output with the stacktrace](#issue_form_log_output_stacktrace) (if it is avaliable).
       options:
         - label: If this is a question/suggestion, I have already considered discussing it on the [Discord Server](https://discord.gg/FQ5vgW3)
         - label: I have attempted to [look for similar issues](https://github.com/twitch4j/twitch4j/issues) already
