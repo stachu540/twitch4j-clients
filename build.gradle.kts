@@ -40,6 +40,7 @@ subprojects {
 
   // Source Compatibility
   java {
+    modularity.inferModulePath.set(true)
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
     withSourcesJar()
@@ -60,7 +61,6 @@ subprojects {
 
       // Clients
       implementation(group = "com.squareup.okhttp3", name = "okhttp", version = "4.9.1")
-      implementation(group = "com.neovisionaries", name = "nv-websocket-client", version = "2.14")
       implementation(group = "org.apache.httpcomponents.client5", name = "httpclient5", version = "5.0.3")
 
       implementation(group = "com.google.code.gson", name = "gson", version = "2.8.6")
@@ -149,12 +149,8 @@ subprojects {
     // test
     test {
       doFirst {
-        var argv = listOf("--add-opens", "java.base/java.lang=ALL-UNNAMED", "--illegal-access=warn")
         if (JavaVersion.current().isJava9Compatible) {
-          if (jvmArgs != null && jvmArgs!!.isNotEmpty()) {
-            argv = jvmArgs!! + argv
-          }
-          jvmArgs = argv
+          jvmArgs.addAll(listOf("--add-opens", "java.base/java.lang=ALL-UNNAMED", "--illegal-access=warn"))
         }
       }
       useJUnitPlatform {

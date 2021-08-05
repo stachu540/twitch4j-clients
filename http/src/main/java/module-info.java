@@ -9,7 +9,7 @@ module com.github.twitch4j.clients.http {
   requires static org.jetbrains.annotations;
   requires static lombok;
 
-  requires java.net.http;
+  requires transitive java.net.http;
 
   exports com.github.twitch4j.clients.http;
   exports com.github.twitch4j.clients.http.apache;

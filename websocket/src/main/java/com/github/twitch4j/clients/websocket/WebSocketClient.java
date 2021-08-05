@@ -36,7 +36,7 @@ public final class WebSocketClient {
     stop(1000);
   }
 
-  protected void sendRaw(String message) {
+  public void sendRaw(String message) {
     engine.sendRaw(message);
   }
 }
