@@ -2,9 +2,9 @@ plugins {
   signing
   `java-library`
   `maven-publish`
-  kotlin("jvm") version "1.5.0"
-  id("io.freefair.lombok") version "5.3.3.3"
-  id("org.jetbrains.dokka") version "1.4.32"
+  kotlin("jvm") version "1.5.21"
+  id("io.freefair.lombok") version "6.1.0-m3"
+  id("org.jetbrains.dokka") version "1.5.0"
   id("com.coditory.manifest") version "0.1.14"
   id("com.github.johnrengelman.shadow") version "7.0.0"
 }
@@ -31,7 +31,7 @@ subprojects {
   apply(plugin = "com.github.johnrengelman.shadow")
 
   base {
-    archivesBaseName = artifactId
+    archivesName.set(artifactId)
   }
 
   lombok {
@@ -50,28 +50,28 @@ subprojects {
   dependencies {
     constraints {
       // Reactive Streams / Coroutines
-      implementation(group = "io.reactivex.rxjava3", name = "rxjava", version = "3.0.12")
-      implementation(group = "io.projectreactor", name = "reactor-core", version = "3.4.5")
-      implementation(group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.4.3")
+      implementation(group = "io.reactivex.rxjava3", name = "rxjava", version = "3.0.13")
+      implementation(group = "io.projectreactor", name = "reactor-core", version = "3.4.8")
+      implementation(group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.5.1")
 
       // Apache Commons
-      implementation(group = "commons-io", name = "commons-io", version = "2.8.0")
+      implementation(group = "commons-io", name = "commons-io", version = "2.11.0")
       implementation(group = "org.apache.commons", name = "commons-text", version = "1.9")
       implementation(group = "org.apache.commons", name = "commons-collections4", version = "4.4")
 
       // Clients
       implementation(group = "com.squareup.okhttp3", name = "okhttp", version = "4.9.1")
-      implementation(group = "org.apache.httpcomponents.client5", name = "httpclient5", version = "5.0.3")
+      implementation(group = "org.apache.httpcomponents.client5", name = "httpclient5", version = "5.1")
 
-      implementation(group = "com.google.code.gson", name = "gson", version = "2.8.6")
+      implementation(group = "com.google.code.gson", name = "gson", version = "2.8.7")
     }
-    implementation(group = "org.jetbrains", name = "annotations", version = "20.1.0")
+    implementation(group = "org.jetbrains", name = "annotations", version = "21.0.1")
     // Test
-    testImplementation(platform("org.junit:junit-bom:5.7.1"))
+    testImplementation(platform("org.junit:junit-bom:5.7.2"))
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter")
-    testImplementation(group = "org.mockito", name = "mockito-core", version = "3.9.0")
-    testImplementation(group = "org.mockito", name = "mockito-junit-jupiter", version = "3.9.0")
-    testImplementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")
+    testImplementation(group = "org.mockito", name = "mockito-core", version = "3.11.2")
+    testImplementation(group = "org.mockito", name = "mockito-junit-jupiter", version = "3.11.2")
+    testImplementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.5")
   }
 
   publishing {
@@ -140,8 +140,8 @@ subprojects {
       dependsOn(delombok)
       source(delombok)
       options {
-        title = "${base.archivesBaseName} (v${project.version})"
-        windowTitle = "${base.archivesBaseName} (v${project.version})"
+        title = "${base.archivesName.get()} (v${project.version})"
+        windowTitle = "${base.archivesName.get()} (v${project.version})"
         encoding = "UTF-8"
       }
     }
@@ -149,8 +149,12 @@ subprojects {
     // test
     test {
       doFirst {
+        var argv = listOf("--add-opens", "java.base/java.lang=ALL-UNNAMED", "--illegal-access=warn")
         if (JavaVersion.current().isJava9Compatible) {
-          jvmArgs.addAll(listOf("--add-opens", "java.base/java.lang=ALL-UNNAMED", "--illegal-access=warn"))
+          if (jvmArgs != null && jvmArgs!!.isNotEmpty()) {
+            argv = jvmArgs!! + argv
+          }
+          jvmArgs = argv
         }
       }
       useJUnitPlatform {
