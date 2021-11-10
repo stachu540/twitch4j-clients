@@ -63,7 +63,7 @@ subprojects {
 
       implementation(group = "com.google.code.gson", name = "gson", version = "2.8.6")
     }
-    implementation(group = "org.jetbrains", name = "annotations", version = "20.1.0")
+    implementation(group = "org.jetbrains", name = "annotations", version = "23.0.0")
     // Test
     testImplementation(platform("org.junit:junit-bom:5.7.1"))
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter")
