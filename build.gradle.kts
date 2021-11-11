@@ -3,7 +3,7 @@ plugins {
   `java-library`
   `maven-publish`
   kotlin("jvm") version "1.5.0"
-  id("io.freefair.lombok") version "5.3.3.3"
+  id("io.freefair.lombok") version "6.3.0"
   id("org.jetbrains.dokka") version "1.4.32"
   id("com.coditory.manifest") version "0.1.14"
 }
