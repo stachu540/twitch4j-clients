@@ -47,7 +47,7 @@ subprojects {
   dependencies {
     constraints {
       // Reactive Streams / Coroutines
-      implementation(group = "io.reactivex.rxjava3", name = "rxjava", version = "3.0.13")
+      implementation(group = "io.reactivex.rxjava3", name = "rxjava", version = "3.1.3")
       implementation(group = "io.projectreactor", name = "reactor-core", version = "3.4.5")
       implementation(group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.4.3")
 
