@@ -2,7 +2,7 @@ plugins {
   signing
   `java-library`
   `maven-publish`
-  kotlin("jvm") version "1.5.0"
+  kotlin("jvm") version "1.6.10"
   id("io.freefair.lombok") version "5.3.3.3"
   id("org.jetbrains.dokka") version "1.4.32"
   id("com.coditory.manifest") version "0.1.14"
